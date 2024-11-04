@@ -1,7 +1,7 @@
 # FastAPI User Authentication
-<p><em><strong>Python and FastAPI for User Authentication, focuses on security, performance, and standard.</strong></em></p>
+<p><em><strong>Focuses on security, performance, and standard.</strong></em></p>
 
-An open-source Python and FastAPI project for user authentication, designed to handle user authentication system with role-based access control (RBAC), scheduled jobs, device and IP address detection, rate limiting, account lockout, IP blacklisting, refresh token rotation, uses Alembic for database migrations to ensure smooth schema updates and more. It leverages Async SQLAlchemy for asynchronous database operations, allowing for improved performance and scalability in handling multiple concurrent requests.
+FastAPI User Authentication: An open-source Python and FastAPI project for user authentication, designed to handle user authentication system with role-based access control (RBAC), scheduled jobs, device and IP address detection, rate limiting, account lockout, IP blacklisting, refresh token rotation, uses Alembic for database migrations to ensure smooth schema updates and more. It leverages Async SQLAlchemy for asynchronous database operations, allowing for improved performance and scalability in handling multiple concurrent requests.
 
 ## Features
 1. **User Registration**: Allows new users to create an account and verify with 6-digit code via email verification.
