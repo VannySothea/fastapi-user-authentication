@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "cf2c8f39-ae3c-4683-b7d0-378568d65938",
+		"name": "User Authentication",
+		"description": "fastapi-user-authentication endpoint",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "36945629"
+	},
+	"item": [
+		{
+			"name": "Register Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_name\": \"User Name\",\r\n    \"email\": \"email@domain.com\",\r\n    \"password\": \"password\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}users"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{URL}}users/all"
+			},
+			"response": []
+		},
+		{
+			"name": "Get User By ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{URL}}users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Log In",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"JWT\", pm.response.json().access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "email@domain.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{URL}}auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Verify User Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"verification_code\": \"000000\",\r\n    \"email\": \"email@domain.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}users/verify-account"
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"JWT\", pm.response.json().access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "refresh-token",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": "{{URL}}auth/refresh"
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email@domain.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}auth/forgot-password"
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"verification_code\": \"000000\",\r\n    \"email\": \"email@domain.com\",\r\n    \"new_password\": \"new_password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}auth/reset-password"
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{JWT}}"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device-id",
+						"type": "text"
+					}
+				],
+				"url": "{{URL}}users/me"
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "some-unique-device",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"verification_code\": \"000000\",\r\n    \"email\": \"email@domain.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}auth/verify-forgot-password-code"
+			},
+			"response": []
+		}
+	]
+}
