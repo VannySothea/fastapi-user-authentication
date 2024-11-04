@@ -27,6 +27,7 @@ FastAPI User Authentication: An open-source Python and FastAPI project for user 
 3. [Usage](#usage)
    - [Alembic](#alembic)
    - [Postman Collection](#postman-collection)
+   - [Sending Emails from the Shared Account](#sending-emails-from-the-shared-account)
    - [Check Rate Limit and Account Lockout](#check-rate-limit-and-account-lockout)
 4. [Project Structure](#project-structure)
 5. [Testing](#testing)  <!-- Placeholder section -->
@@ -156,13 +157,15 @@ REFRESH_TOKEN_EXPIRE_MINUTES=25920 #18 days = 25920 minutes
 ```
 
 #### Secret Environment Variables
+**Note: Change base on your credentials**
+
 **Sample `.env.settings` File**:
 ```ini
 DATABASE_HOSTNAME=localhost
 DATABASE_PORT=5432
 DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=YOUR_DATABASE_PASSWORD
-DATABASE_NAME=YOUR_DATABASE_NAME
+DATABASE_PASSWORD=user
+DATABASE_NAME=fastapi_user_authentication
 
 # JWT Secret Key
 JWT_SECRET=355fa9f6f9c491417c53b701b26dd97df5825d4abd02957ce3bb1b9658593d9a
@@ -172,16 +175,18 @@ SECRET_KEY=9a35f82513e1cdf2748afbd4681ff2eda8fc29a46df52cc8c4cdd561c0632400
 ```
 
 #### Mail Environment Variables
+**Note: We highly encourage to use your own customized email address.**
+
 **Sample `.env.mail` File**:
 ```ini
-MAIL_USERNAME=REPLACE_THIS_WITH_YOUR_EMAIL_ADDRESS_@GMAIL.COM
-MAIL_PASSWORD=REPLACE_THIS_WITH_YOUR_EMAIL_PASSWORD
-MAIL_PORT=EMAIL_PORT
-MAIL_SERVER=YOUR_EMAIL_SERVER
+MAIL_USERNAME=open.source.user.authentication@gmail.com
+MAIL_PASSWORD=avvx yapu kbko nbzg
+MAIL_PORT=587
+MAIL_SERVER=smtp.gmail.com
 MAIL_STARTTLS=True
 MAIL_SSL_TLS=False
 MAIL_DEBUG=True
-MAIL_FROM=REPLACE_THIS_WITH_YOUR_EMAIL_ADDRESS_@GMAIL.COM
+MAIL_FROM=open.source.user.authentication@gmail.com
 MAIL_FROM_NAME=APP_NAME
 USE_CREDENTIALS=True
 ```
@@ -217,8 +222,11 @@ OPERATION_IP_LOCKOUT_PERIOD=10800
 ### Alembic
 To manage database schema changes, this project utilizes Alembic. Ensure you have Alembic installed and configured. You can run migrations with the following command:
 ```bash
-alembic revision --autogenerate -m "Your message here"
 alembic upgrade head
+```
+or
+```bash
+alembic revision --autogenerate -m "Your message here"
 ```
 This module can be tested and used via Postman. Below is example of how to interact with the user authentication API using Postman.
 
@@ -251,6 +259,29 @@ To make it easier, you can use the provided Postman collection that includes all
 3. Choose the downloaded collection file and click "Open."
 
 4. The collection will appear in your Postman app, ready to use.
+
+### Sending Emails from the Shared Account
+This application is configured to send emails from a dedicated account: `open.source.user.authentication@gmail.com`. This account is specifically created for application use and utilizes an app password for secure authentication.
+
+**Note: It is perfectly fine to use your own customized email address.**
+
+#### Important Guidelines
+- **Account Usage**: Emails sent from this account should only be related to application functionalities (e.g., account verification, password resets).
+- **Rate Limits**: Be aware that this account has a limit on the number of emails sent per day. Please do not send excessive emails to avoid being flagged for spam.
+- **Content Restrictions**: Ensure that the content of the emails adheres to community standards and does not include spam or unsolicited messages.
+- **Consent**: Always obtain consent from recipients before sending emails, particularly for verification purposes.
+
+#### Important Notice: Shared Email Account Security
+
+As this application is open source, the email account used for sending communications is also publicly accessible to anyone who has access to the codebase. Please keep the following points in mind:
+
+- **Account Transparency**: The email account (`open.source.user.authentication@gmail.com`) is intended solely for sending application-related emails, such as account verification and notifications. Since it is shared, any contributor or user of the codebase may see the email credentials.
+
+- **Data Handling**: Be mindful of the data you handle and send through this shared account. Avoid including sensitive personal information in email communications to protect users' privacy.
+
+- **Security Practices**: While we use an app password for secure access, it's crucial to maintain best practices around data security. Do not share or expose the email credentials in public forums or repositories.
+
+- **Usage Guidelines**: Only use the shared email account for legitimate application purposes. This helps prevent misuse of the account and ensures that we maintain a positive reputation for the application.
 
 ### Check Rate Limit and Account Lockout
 For routes that implement rate limiting and lockout, you can make requests to that endpoint multiple times to test the functionality.

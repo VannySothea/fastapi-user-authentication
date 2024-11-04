@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from app.routes import user, security
 from app.jobs.scheduler import start_scheduler, shutdown_scheduler
+
 from app.config.role import initialize_app_roles
 initialize_app_roles()
-
 
 
 
