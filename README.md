@@ -1,23 +1,31 @@
 # FastAPI User Authentication
-<p><em>Python and FastAPI for User Authentication module focuses on security and standard.</em></p>
+<p><em><strong>Python and FastAPI for User Authentication, focuses on security, performance, and standard.</strong></em></p>
 
-An open-source user authentication module for applications built with Python and FastAPI, designed to handle user registration, email verification, authentication, reset password, device detection, rate limiting, account lockout, IP blacklisting, and refresh token rotation.
+An open-source Python and FastAPI project for user authentication, designed to handle user authentication system with role-based access control (RBAC), scheduled jobs, device and IP address detection, rate limiting, account lockout, IP blacklisting, refresh token rotation, uses Alembic for database migrations to ensure smooth schema updates and more. It leverages Async SQLAlchemy for asynchronous database operations, allowing for improved performance and scalability in handling multiple concurrent requests.
 
 ## Features
-- **User Registration**: Allows new users to create an account and verify with 6-digit code via email verification.
-- **User Authentication**: Enables users to log in securely using their credentials.
-- **Password Reset**: Facilitates password recovery and verify with 6-digit code via email verification.
-- **Device Limitation**: Allows users to log in on up to 5 devices per account, removing the oldest device upon exceeding the limit.
-- **Rate Limiting**: Restricts repeated requests within a defined period to prevent abuse.
-- **Account Lockout**: Temporarily locks user accounts after multiple failed login attempts.
-- **IP Blacklisting**: Blocks requests from specific IPs to enhance security.
-- **Refresh Token Rotation**: Provides secure, rotating access and refresh tokens for session management.
+1. **User Registration**: Allows new users to create an account and verify with 6-digit code via email verification.
+2. **User Authentication**: Enables users to log in securely using their credentials.
+3. **Password Reset**: Facilitates password recovery and verify with 6-digit code via email verification.
+4. **Device Limitation**: Allows users to log in on up to specific number of devices per account (e.g., 5 devices log in on 1 account), removing the oldest device upon exceeding the limit.
+5. **Refresh Token Rotation**: Provides secure, rotating access and refresh tokens for session management.
+6. **Role Base Acess Control (RBAC)**: Permissions and access levels within the application
+7. **Rate Limiting**: Restricts repeated requests within a defined period to prevent abuse.
+8. **Account Lockout**: Temporarily locks user accounts after multiple failed login attempts.
+9. **IP Blacklisting**: Blocks requests from specific IPs to enhance security.
+10. **Periodic Cleanup**: Schedule background jobs for tasks like cleanup. This keeps the database clean and prevents it from growing uncontrollably.
+11. **Temporary Storage**: Store registration data in a temporary location (e.g., a separate database table) until the user verifies their email. Once verified, move the data to the main user table. This keeps the primary user table free from unverified accounts.
+12. **Async SQLAlchemy**: for asynchronous database operations, allowing for improved performance and scalability in handling multiple concurrent requests.
 
 ## Table of Contents
 1. [Installation](#installation)
    - [Redis Setup](#redis-setup)
 2. [Configuration](#configuration)
+   - [Roles Setup](#role-setup)
+   - [Periodic Cleanup Setup](#periodic-cleanup-setup)
+   - [Environment Variables](#environment-variables)
 3. [Usage](#usage)
+   - [Alembic](#alembic)
    - [Postman Collection](#postman-collection)
    - [Check Rate Limit and Account Lockout](#check-rate-limit-and-account-lockout)
 4. [Project Structure](#project-structure)
@@ -76,8 +84,65 @@ To install Redis, follow the instructions for your operating system:
      ```
 
 ## Configuration
-You can configure database, email, rate limits, lockout settings, token secret, and other settings via environment variables or by modifying the `.env` file format.
 
+### Role Setup
+#### Initialize Roles
+In app/config/role.py
+```python
+def initialize_roles(session: Session):
+   print("Generating role")
+   roles = ["normal_user", "education_user", "business_user", "admin"]
+   for role_name in roles:
+       role = session.query(Role).filter_by(role_name=role_name).first()
+   
+       if not role:
+           new_role = Role(role_name=role_name)
+           session.add(new_role)
+   
+   session.commit()
+```
+#### Routes Dependencies
+In app/routes/user.py
+```python
+auth_router = APIRouter(
+    prefix="/users",
+    tags=["Users"],
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(oauth2_scheme), Depends(get_current_user)]
+)
+
+business_router = APIRouter(
+    prefix="/business",
+    tags=["Business"],
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(oauth2_scheme), Depends(get_role_dependency(required_role="business_user"))]
+)
+
+admin_router = APIRouter(
+    prefix="/admin",
+    tags=["Admin"],
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(oauth2_scheme), Depends(get_role_dependency(required_role="admin"))]
+)
+```
+
+### Periodic Cleanup Setup
+**Start the background jobs scheduler**
+
+In app/main.py
+```python
+from app.jobs.scheduler import start_scheduler, shutdown_scheduler
+
+start_scheduler()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    shutdown_scheduler()
+```
+
+### Environment Variables
+You can configure database, email, rate limits, lockout settings, token secret, and other settings via environment variables or by modifying the `.env` file format.
+#### App Environment Variables
 **Sample `.env` File**:
 ```ini
 APP_NAME=APP_NAME
@@ -90,20 +155,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=3
 REFRESH_TOKEN_EXPIRE_MINUTES=25920 #18 days = 25920 minutes
 ```
 
-**Sample `.env.mail` File**:
-```ini
-MAIL_USERNAME=REPLACE_THIS_WITH_YOUR_EMAIL_ADDRESS_@GMAIL.COM
-MAIL_PASSWORD=REPLACE_THIS_WITH_YOUR_EMAIL_PASSWORD
-MAIL_PORT=EMAIL_PORT
-MAIL_SERVER=YOUR_EMAIL_SERVER
-MAIL_STARTTLS=True
-MAIL_SSL_TLS=False
-MAIL_DEBUG=True
-MAIL_FROM=REPLACE_THIS_WITH_YOUR_EMAIL_ADDRESS_@GMAIL.COM
-MAIL_FROM_NAME=APP_NAME
-USE_CREDENTIALS=True
-```
-
+#### Secret Environment Variables
 **Sample `.env.settings` File**:
 ```ini
 DATABASE_HOSTNAME=localhost
@@ -119,8 +171,24 @@ JWT_SECRET=355fa9f6f9c491417c53b701b26dd97df5825d4abd02957ce3bb1b9658593d9a
 SECRET_KEY=9a35f82513e1cdf2748afbd4681ff2eda8fc29a46df52cc8c4cdd561c0632400
 ```
 
+#### Mail Environment Variables
+**Sample `.env.mail` File**:
+```ini
+MAIL_USERNAME=REPLACE_THIS_WITH_YOUR_EMAIL_ADDRESS_@GMAIL.COM
+MAIL_PASSWORD=REPLACE_THIS_WITH_YOUR_EMAIL_PASSWORD
+MAIL_PORT=EMAIL_PORT
+MAIL_SERVER=YOUR_EMAIL_SERVER
+MAIL_STARTTLS=True
+MAIL_SSL_TLS=False
+MAIL_DEBUG=True
+MAIL_FROM=REPLACE_THIS_WITH_YOUR_EMAIL_ADDRESS_@GMAIL.COM
+MAIL_FROM_NAME=APP_NAME
+USE_CREDENTIALS=True
+```
+
+#### Rate Limiting Environment Variables
 **Sample `.env.ratelimiting` File**:
-By using the value below, rate limit will apply after the operation reach
+By using the value below, the cooldown will apply after the operation exceed the limit
 - Device: 4 requests in 30 seconds will cooldown for 5 minutes
 - IP Address: 10 requests in 30 seconds will cooldown for 10 minutes
 ```ini
@@ -131,8 +199,9 @@ OPERATION_IP_RATE_LIMIT=10
 OPERATION_IP_COOLDOWN=600
 ```
 
+#### Lockout Environment Variables
 **Sample `.env.lockout` File**:
-By using the value below, lockout will apply after the operation reach
+By using the value below, lockout will apply after the operation exceed the limit
 - Device: 5 failed in 3 minutes will lockout for 30 minutes
 - IP Address: 15 failed in 3 minutes will lockout for 3 hours
 ```ini
@@ -144,6 +213,13 @@ OPERATION_IP_LOCKOUT_PERIOD=10800
 ```
 
 ## Usage
+
+### Alembic
+To manage database schema changes, this project utilizes Alembic. Ensure you have Alembic installed and configured. You can run migrations with the following command:
+```bash
+alembic revision --autogenerate -m "Your message here"
+alembic upgrade head
+```
 This module can be tested and used via Postman. Below is example of how to interact with the user authentication API using Postman.
 
 ### Register a User
@@ -190,7 +266,7 @@ fastapi-user-authentication/
 ├── .github/              # GitHub templates and settings
 ├── alembic/              # Database migrations
 ├── app/                  # Main application code
-│   ├── config/           # Configuration files (database, email, security)
+│   ├── config/           # Configuration files (database, email, roles, security)
 │   ├── jobs/             # Background tasks and schedulers
 │   ├── models/           # Database models
 │   ├── responses/        # API response schemas
@@ -235,4 +311,12 @@ Contributions are welcome! If you’d like to contribute, please follow these gu
 Please review the `CODE_OF_CONDUCT.md` file for community guidelines and best practices when contributing.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+`VannySothea/fastapi-user-authentication` is open source and free to use based on `MIT License` and can be used for commercial purposes for free, but please clearly display the copyright information about VannySothea/fastapi-user-authentication in the display interface.
+- This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Thanks
+Thanks to the following developers for their contributions to fastapi-user-authentication:
+
+<a href="https://github.com/VannySothea/fastapi-user-authentication/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=VannySothea/fastapi-user-authentication"  alt="Project Contributor"/>
+</a>
