@@ -31,20 +31,22 @@ FastAPI User Authentication: An open-source Python and FastAPI project for user 
    - [Check Rate Limit and Account Lockout](#check-rate-limit-and-account-lockout)
 4. [Project Structure](#project-structure)
 5. [Testing](#testing)  <!-- Placeholder section -->
-6. [Contributing](#contributing)
-7. [License](#license)
+6. [License](#license)
+7. [Contributing](#contributing)
 
 ## Installation
 1. **Clone the Repository**:
+
    ```bash
    git clone https://github.com/VannySothea/fastapi-user-authentication.git
    cd fastapi-user-authentication
    ```
-2. **Install Dependencies**: Make sure you have Python installed, then install required packages:
+3. **Install Dependencies**: Make sure you have Python installed, then install required packages:
+
    ```bash
    pip install -r requirements.txt
    ```
-3. **Setup Database**: Configure a database (e.g., PostgreSQL) for user authentication data storage. Update your .env file with the database URI.
+5. **Setup Database**: Configure a database (e.g., PostgreSQL) for user authentication data storage. Update your .env file with the database URI.
   
 ### Redis Setup
 This authentication module requires Redis for rate limiting, account lockout, and IP blacklisting features. Redis acts as a fast, in-memory database to manage these features efficiently.
@@ -76,10 +78,12 @@ To install Redis, follow the instructions for your operating system:
   1. Download the latest [Redis release for Windows](https://github.com/microsoftarchive/redis/releases).
   2. Extract the downloaded file, then open the extracted folder in Command Prompt.
   3. Run Redis with the following command:
+
      ```bash
      redis-server.exe
      ```
      Or
+
      ```bash
      ./redis-server.exe
      ```
@@ -238,6 +242,7 @@ This module can be tested and used via Postman. Below is example of how to inter
   - Content-Type: application/json
   - device-id: `your_device_id_here`
 - **Body** (JSON):
+
   ```json
   {
     "user_name": "User Name",
@@ -265,23 +270,7 @@ This application is configured to send emails from a dedicated account: `open.so
 
 **Note: It is perfectly fine to use your own customized email address.**
 
-#### Important Guidelines
-- **Account Usage**: Emails sent from this account should only be related to application functionalities (e.g., account verification, password resets).
-- **Rate Limits**: Be aware that this account has a limit on the number of emails sent per day. Please do not send excessive emails to avoid being flagged for spam.
-- **Content Restrictions**: Ensure that the content of the emails adheres to community standards and does not include spam or unsolicited messages.
-- **Consent**: Always obtain consent from recipients before sending emails, particularly for verification purposes.
-
-#### Important Notice: Shared Email Account Security
-
-As this application is open source, the email account used for sending communications is also publicly accessible to anyone who has access to the codebase. Please keep the following points in mind:
-
-- **Account Transparency**: The email account (`open.source.user.authentication@gmail.com`) is intended solely for sending application-related emails, such as account verification and notifications. Since it is shared, any contributor or user of the codebase may see the email credentials.
-
-- **Data Handling**: Be mindful of the data you handle and send through this shared account. Avoid including sensitive personal information in email communications to protect users' privacy.
-
-- **Security Practices**: While we use an app password for secure access, it's crucial to maintain best practices around data security. Do not share or expose the email credentials in public forums or repositories.
-
-- **Usage Guidelines**: Only use the shared email account for legitimate application purposes. This helps prevent misuse of the account and ensures that we maintain a positive reputation for the application.
+**If you use the provided account, you may want to read [Email Usage](https://github.com/VannySothea/fastapi-user-authentication/edit/main/SECURITY.md#sending-emails-from-the-shared-account).**
 
 ### Check Rate Limit and Account Lockout
 For routes that implement rate limiting and lockout, you can make requests to that endpoint multiple times to test the functionality.
@@ -309,11 +298,15 @@ fastapi-user-authentication/
 │   └── main.py           # Entry point for starting the FastAPI application
 ├── env/                  # Environment variables
 ├── .gitignore            # Files and directories to be ignored by Git
+├── CODE_OF_CONDUCT.md    # Project Code of conduct documentation
+├── CONTRUBUTING.md       # Project contribution information
 ├── LICENSE               # Project license
 ├── README.md             # Project documentation
+├── RELEASE_NOTES.md      # Project Release notes
+├── SECURITY.md           # Project security vulnerabilities
 ├── alembic.ini           # Alembic configuration
 ├── requirements.txt      # Python dependencies
-└── user_authentication_VannySothea.postman_collection  # Postman API collection
+└── user_authentication_VannySothea.postman_collection   # Postman API collection
 ```
 
 ## Testing
@@ -327,23 +320,27 @@ If you're interested in contributing, here are some ways you can help:
 - **Test Documentation**: Assist in documenting the testing process and how to run tests.
 
 Feel free to open an issue or submit a pull request to discuss your contributions!
-## Contributing
-Contributions are welcome! If you’d like to contribute, please follow these guidelines:
-
-1. **Fork the Repository**: Make a copy of this repo on your own GitHub account.
-2. **Create a New Branch**: For each feature or bug fix, create a new branch:
-   ```bash
-   git checkout -b feature/new-feature
-   ```
-3. **Write Clear, Detailed Commits**: Aim for concise, meaningful commit messages.
-4. **Create a Pull Request**: Once your code is ready, open a pull request (PR) from your branch to the `main` branch.
-
-**Code of Conduct**:
-Please review the `CODE_OF_CONDUCT.md` file for community guidelines and best practices when contributing.
 
 ## License
+
 `VannySothea/fastapi-user-authentication` is open source and free to use based on `MIT License` and can be used for commercial purposes for free, but please clearly display the copyright information about VannySothea/fastapi-user-authentication in the display interface.
+
 - This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Security
+
+Please see [SECURITY.md](SECURITY.md) for details on reporting security vulnerabilities.
+
+## Code of Conduct:
+
+Please review the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file for community guidelines and best practices when contributing.
+
+## Release Notes
+
+See [RELEASE_NOTES.md](RELEASE_NOTES.md) for a detailed changelog of the project's versions.
+
+## Contributing
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this project.
 
 ## Thanks
 Thanks to the following developers for their contributions to fastapi-user-authentication:
