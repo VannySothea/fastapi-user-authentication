@@ -7,11 +7,12 @@ Thank you for your interest in contributing! We welcome contributions to improve
 - [Getting Started](#getting-started)
 - [Development Workflow](#development-workflow)
 - [Guidelines](#guidelines)
-- [Submitting Contributions](#submitting-contributions)
-- [Code of Conduct](#code-of-conduct)
+- [Documents](#documents)
 - [Contact](#contact)
 
 ## Getting Started
+
+Checkout [Project Issues](https://github.com/VannySothea/fastapi-user-authentication/issues) for details to-do information.
 
 1. **Fork the Repository**: Start by forking the repository to your GitHub account.
 2. **Clone Your Fork**:
@@ -80,10 +81,33 @@ Thank you for your interest in contributing! We welcome contributions to improve
 - Reference any relevant issues by including the issue number.
 - Address any feedback from code reviewers.
 
-## Code of Conduct
+## Documents
 
-This project adheres to a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you agree to uphold these standards.
+### License
+
+`VannySothea/fastapi-user-authentication` is open source and free to use based on `MIT License` and can be used for commercial purposes for free, but please clearly display the copyright information about VannySothea/fastapi-user-authentication in the display interface.
+
+- This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+### Security
+
+Please see [SECURITY.md](SECURITY.md) for details on reporting security vulnerabilities.
+
+### Code of Conduct:
+
+Please review the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file for community guidelines and best practices when contributing.
+
+### Release Notes
+
+See [RELEASE_NOTES.md](RELEASE_NOTES.md) for a detailed changelog of the project's versions.
+
+### Thanks
+Thanks to the following developers for their contributions to fastapi-user-authentication:
+
+<a href="https://github.com/VannySothea/fastapi-user-authentication/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=VannySothea/fastapi-user-authentication"  alt="Project Contributor"/>
+</a>
 
 ## Contact
 
-If you have any questions or need further guidance, feel free to reach out by creating an issue in the repository or contacting the maintainers.
+If you have any questions or need further guidance, feel free to reach out by creating an issue in the repository or contacting the maintainers or project owner `v.sothea.personal@gmail.com`.
