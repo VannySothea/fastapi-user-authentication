@@ -9,7 +9,7 @@ FastAPI User Authentication: An open-source Python and FastAPI project for user 
 3. **Password Reset**: Facilitates password recovery and verify with 6-digit code via email verification.
 4. **Device Limitation**: Allows users to log in on up to specific number of devices per account (e.g., 5 devices log in on 1 account), removing the oldest device upon exceeding the limit.
 5. **Refresh Token Rotation**: Provides secure, rotating access and refresh tokens for session management.
-6. **Role Base Acess Control (RBAC)**: Permissions and access levels within the application
+6. **Role Base Access Control (RBAC)**: Permissions and access levels within the application
 7. **Rate Limiting**: Restricts repeated requests within a defined period to prevent abuse.
 8. **Account Lockout**: Temporarily locks user accounts after multiple failed login attempts.
 9. **IP Blacklisting**: Blocks requests from specific IPs to enhance security.
@@ -41,7 +41,7 @@ FastAPI User Authentication: An open-source Python and FastAPI project for user 
    git clone https://github.com/VannySothea/fastapi-user-authentication.git
    cd fastapi-user-authentication
    ```
-3. **Install Dependencies**: Make sure you have Python installed, then install required packages:
+3. **Install Dependencies**: Make sure you have Python installed, then install the required packages:
 
    ```bash
    pip install -r requirements.txt
@@ -60,7 +60,7 @@ To install Redis, follow the instructions for your operating system:
   ```
   Then start Redis:
   ```bash
-  brew services start redis
+  brew services start Redis
   ```
 
 - **Linux** (Ubuntu/Debian):
